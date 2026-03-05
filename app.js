@@ -25,8 +25,9 @@ async function main(){
     await mongoose.connect(mongo_url);
 }
 
-app.get("/", (req,res)=>{
-    res.send("app is working");
+app.get("/", async (req,res) => {
+   let allListings = await Listing.find({});
+   res.render("listings/index.ejs",{allListings});
 });
 
 //Index Route
