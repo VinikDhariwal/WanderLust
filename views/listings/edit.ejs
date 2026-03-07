@@ -3,7 +3,7 @@
 <div class="container mt-4 mb-5" style="max-width: 600px;">
     <h3 class="mb-4">Edit Your Listing</h3>
 
-    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT">
+    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation">
 
         <!-- Title -->
         <div class="mb-3">
@@ -15,6 +15,7 @@
                 value="<%= listing.title %>"
                 required
             />
+            <div class="invalid-feedback">Enter a valid title for the place!</div>
         </div>
 
         <!-- Description -->
@@ -26,6 +27,7 @@
                 rows="3"
                 required
             ><%= listing.description %></textarea>
+            <div class="invalid-feedback">A description is required!</div>
         </div>
 
         <!-- Image URL -->
@@ -50,6 +52,7 @@
                 value="<%= listing.price %>"
                 required
             />
+            <div class="invalid-feedback">Please enter a valid price!</div>
         </div>
 
         <!-- Location -->
@@ -62,6 +65,7 @@
                 value="<%= listing.location %>"
                 required
             />
+            <div class="invalid-feedback">Please enter a location!</div>
         </div>
 
         <!-- Country -->
@@ -74,6 +78,7 @@
                 value="<%= listing.country %>"
                 required
             />
+            <div class="invalid-feedback">Please enter country name!</div>
         </div>
 
         <button class="btn btn-dark  add-btn w-100">Update Listing</button>
