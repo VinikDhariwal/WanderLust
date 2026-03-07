@@ -6,7 +6,7 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsmate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
-const ExpressError = require("./utils/ExpressError.js");
+const ExpressError = require("./utils/ExpressError");
 const {listingSchema} = require("./schema.js");
 
 app.set("view engine", "ejs");
@@ -33,17 +33,26 @@ app.get("/", async (req,res) => {
    res.render("listings/index.ejs",{allListings});
 });
 
-
-const validateListing = (req,res,next)=>{
-    // Validate the request body
-    let { error } = listingSchema.validate(req.body);
-    if (error) {
-        let errMsg = error.details.map((el) => el.message).join(",");
-        throw new ExpressError(400, errMsg);
-    }else{
-        next();
+const validateListing = (req, res, next) => {
+    // Convert price to a number
+    if (req.body.price) {
+        req.body.price = Number(req.body.price);
     }
+
+    // Validate the body against schema
+    const { error, value } = listingSchema.validate(req.body);
+
+    if (error) {
+        const errMsg = error.details.map(el => el.message).join(",");
+        throw new ExpressError(400, errMsg);
+    }
+
+    // Attach validated data
+    req.validatedListing = value;
+    next();
 };
+
+module.exports = validateListing;
 
 //Index Route
 app.get("/listings", async (req,res) => {
@@ -64,15 +73,14 @@ app.get("/listings/:id", async (req,res) => {
 });
 
 // Create Route
-app.post("/listings", 
+app.post("/listings",
     validateListing,
-    wrapAsync(async (req, res, next) => {
-    // Create a new Listing using validated data
-    const newListing = new Listing(value.listing);
-    await newListing.save();
-    // Redirect to listings page after successful save
-    res.redirect("/listings");
-}));
+    wrapAsync(async (req, res) => {
+        const newListing = new Listing(req.validatedListing);
+        await newListing.save();
+        res.redirect("/listings");
+    })
+);
 
 //Edit Route
 app.get("/listings/:id/edit", async (req, res) => {
