@@ -1,0 +1,45 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-6 offset-md-3 text-center">
+
+      <% 
+        let title = "Something went wrong!";
+        let alertType = "danger";
+
+        if(statusCode === 404){
+          title = "Page Not Found";
+          alertType = "warning";
+        } else if(statusCode === 400){
+          title = "Bad Request";
+        } else if(statusCode === 401){
+          title = "Unauthorized";
+        } else if(statusCode === 403){
+          title = "Forbidden";
+        } else if(statusCode === 500){
+          title = "Internal Server Error";
+        }
+      %>
+
+      <div class="alert alert-<%= alertType %> shadow p-4">
+
+        <h1 class="display-6 fw-bold"><%= title %></h1>
+
+        <h4 class="mt-3">
+          Error <%= statusCode %>
+        </h4>
+
+        <p class="mt-2">
+          <%= message %>
+        </p>
+
+        <a href="/listings" class="btn btn-dark mt-3">
+          Back to Listings
+        </a>
+
+      </div>
+
+    </div>
+  </div>
+</div>
