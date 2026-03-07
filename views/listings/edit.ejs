@@ -7,9 +7,9 @@
 
         <!-- Title -->
         <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
+            <label class="form-label">Title</label>
             <input 
-                name="title" 
+                name="listing[title]" 
                 type="text" 
                 class="form-control"
                 value="<%= listing.title %>"
@@ -20,9 +20,9 @@
 
         <!-- Description -->
         <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
+            <label class="form-label">Description</label>
             <textarea 
-                name="description" 
+                name="listing[description]" 
                 class="form-control"
                 rows="3"
                 required
@@ -32,9 +32,9 @@
 
         <!-- Image URL -->
         <div class="mb-3">
-            <label for="image" class="form-label">Image URL</label>
+            <label class="form-label">Image URL</label>
             <input 
-                name="image"  
+                name="listing[image]"  
                 type="text"
                 class="form-control"
                 value="<%= listing.image %>"
@@ -43,9 +43,9 @@
 
         <!-- Price -->
         <div class="mb-3">
-            <label for="price" class="form-label">Price</label>
+            <label class="form-label">Price</label>
             <input 
-                name="price"  
+                name="listing[price]"  
                 type="number" 
                 class="form-control"
                 value="<%= listing.price %>"
@@ -56,9 +56,9 @@
 
         <!-- Location -->
         <div class="mb-3">
-            <label for="location" class="form-label">Location</label>
+            <label class="form-label">Location</label>
             <input 
-                name="location"  
+                name="listing[location]"  
                 type="text"
                 class="form-control"
                 value="<%= listing.location %>"
@@ -69,9 +69,9 @@
 
         <!-- Country -->
         <div class="mb-4">
-            <label for="country" class="form-label">Country</label>
+            <label class="form-label">Country</label>
             <input 
-                name="country"  
+                name="listing[country]"  
                 type="text" 
                 class="form-control"
                 value="<%= listing.country %>"
@@ -80,7 +80,7 @@
             <div class="invalid-feedback">Please enter country name!</div>
         </div>
 
-        <button class="btn btn-dark add-btn w-100">Update Listing</button>
+        <button class="btn btn-dark w-100">Update Listing</button>
 
     </form>
 </div>

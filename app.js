@@ -12,29 +12,35 @@ const { listingSchema } = require("./schema");
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.engine("ejs", ejsmate);
+
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
-// Connect to MongoDB
+// ---------------------- DATABASE ----------------------
+
 const mongo_url = "mongodb://127.0.0.1:27017/wanderlust";
+
 mongoose.connect(mongo_url)
     .then(() => console.log("Database connected"))
     .catch(err => console.log(err));
 
 // ---------------------- MIDDLEWARE ----------------------
 
-// Validate listing data
 const validateListing = (req, res, next) => {
-    // Ensure price is a number
-    if (req.body.price) req.body.price = Number(req.body.price);
+    // convert price to number (correct path)
+    if (req.body.listing && req.body.listing.price) {
+        req.body.listing.price = Number(req.body.listing.price);
+    }
 
     const { error, value } = listingSchema.validate(req.body);
+
     if (error) {
         const errMsg = error.details.map(el => el.message).join(", ");
         throw new ExpressError(400, errMsg);
     }
-    req.validatedListing = value; // save validated data
+
+    req.validatedListing = value.listing; // extract listing object
     next();
 };
 
@@ -82,8 +88,15 @@ app.get("/listings/:id/edit", wrapAsync(async (req, res, next) => {
 // Update Listing
 app.put("/listings/:id", validateListing, wrapAsync(async (req, res, next) => {
     const { id } = req.params;
-    const updated = await Listing.findByIdAndUpdate(id, req.validatedListing, { new: true, runValidators: true });
+
+    const updated = await Listing.findByIdAndUpdate(
+        id,
+        req.validatedListing,
+        { returnDocument: "after", runValidators: true }
+    );
+
     if (!updated) return next(new ExpressError(404, "Listing not found"));
+
     res.redirect(`/listings/${id}`);
 }));
 
@@ -109,4 +122,7 @@ app.use((err, req, res, next) => {
 });
 
 // ---------------------- SERVER ----------------------
-app.listen(8080, () => console.log("Server running on port 8080"));
+
+app.listen(8080, () => {
+    console.log("Server running on port 8080");
+});
