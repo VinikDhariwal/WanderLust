@@ -5,7 +5,7 @@
   <div class="card">
     <img src="<%= listing.image %>>" class="card-img-top show-img" alt="listing_image" />
     <div class="card-body">
-      <b><%= listing.title %></b>
+      <b><%= listing.title %></b><br>
       <%= listing.description %><br>
       &#8377;<%= listing.price?.toLocaleString("en-IN") || "0" %><br>
       <%= listing.location %><br>
