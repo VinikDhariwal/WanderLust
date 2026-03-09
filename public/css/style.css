@@ -1,155 +1,254 @@
+/* ================= GLOBAL LAYOUT ================= */
+
 body{
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
 }
+
 .container{
-    flex: 1;
+    flex:1;
 }
+
 
 /* ================= NAVBAR ================= */
 
-.navbar {
-    height: 5rem;
-    background-color: #ffffff;
+.navbar{
+    height:5rem;
+    background-color:#ffffff;
 }
 
-.fa-compass {
-    color: #fe424d;
-    font-size: 2rem;
+.fa-compass{
+    color:#fe424d;
+    font-size:2rem;
 }
 
-.nav-link {
-    color: #222222 !important;
+.nav-link{
+    color:#222222 !important;
 }
 
 
 /* ================= FOOTER ================= */
 
-.f-info {
-    height: auto;
-    background-color: #ebebeb;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 1.5rem 0;
-    gap: 1rem;
+.f-info{
+    background-color:#ebebeb;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:1.5rem 0;
+    gap:1rem;
 }
 
-.socials i {
-    font-size: 1.5rem;
-    margin: 0 1rem;
-    cursor: pointer;
-    transition: color 0.3s ease, transform 0.3s ease;
-    vertical-align: middle;
+.socials i{
+    font-size:1.5rem;
+    margin:0 1rem;
+    cursor:pointer;
+    transition:color 0.3s ease, transform 0.3s ease;
 }
 
-.socials i:hover {
-    color: #fe424d;
-    transform: scale(1.2);
+.socials i:hover{
+    color:#fe424d;
+    transform:scale(1.2);
 }
 
-.wanderlust {
-    font-weight: 1000;
+.wanderlust{
+    font-weight:1000;
 }
 
-.imp-links a {
-    text-decoration: none;
-    color: #222222;
-    margin: 0 0.5rem;
+.imp-links a{
+    text-decoration:none;
+    color:#222222;
+    margin:0 0.5rem;
 }
 
-.imp-links a:hover {
-    text-decoration: underline;
+.imp-links a:hover{
+    text-decoration:underline;
 }
 
 
 /* ================= LISTINGS CONTAINER ================= */
 
-.listings {
-    max-width: 1200px;
-    margin: 0 auto !important;
+.listings{
+    max-width:1200px;
+    margin:0 auto !important;
 }
 
 
 /* ================= CARDS ================= */
 
-.card {
-    border: none !important;
-    margin-bottom: 2rem;
-    border-radius: 1.5rem;
-    overflow: hidden;   /* VERY IMPORTANT */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
+.card{
+    border-radius:12px;
+    border:1px solid #e5e5e5;
+    margin-bottom:2rem;
+    overflow:hidden;
+    transition:transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+    cursor:pointer;
 }
 
-.card {
-    border-radius: 12px;
-    transition: box-shadow 0.3s ease, border 0.3s ease;
-    border: 1px solid #e5e5e5;
+.card:hover{
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    border:1px solid #d0d0d0;
 }
 
-.card:hover {
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-    border: 1px solid #d0d0d0;
+/* Listing Image */
+
+.card-img-top{
+    width:100%;
+    height:270px;
+    object-fit:cover;
+    transition:transform 0.4s ease;
 }
 
-/* Image */
-.card-img-top {
-    width: 100%;
-    height: 270px;
-    object-fit: cover;
-    transition: transform 0.4s ease;
+.card-img-top:hover{
+    transform:scale(1.03);
 }
 
-.card-body {
-    padding: 1rem !important;
+.card-body{
+    padding:1rem !important;
 }
 
-.card-text {
-    font-weight: 500 !important;
+.card-text{
+    font-weight:500 !important;
 }
+
 
 /* ================= LINKS ================= */
 
-.listing-links {
-    text-decoration: none !important;
+.listing-links{
+    text-decoration:none !important;
 }
+
+
+/* ================= BUTTONS ================= */
 
 .add-btn{
-    background-color: #fe424d !important;
-    border: none !important;
-}
-
-.show-img {
-  height: 30vh;
-  object-fit: cover;
-  border-radius: 12px 12px 0 0;
+    background-color:#fe424d !important;
+    border:none !important;
 }
 
 .edit-btn{
-    background-color: transparent;
-    border: 2px solid #000;
-    color: #000;
-    transition: all 0.3s ease;
+    background-color:transparent;
+    border:2px solid #000;
+    color:#000;
+    transition:all 0.3s ease;
 }
 
-.del-btn {
-    background-color: transparent;
-    border: 2px solid #000;
-    color: #000;
-    transition: all 0.3s ease;
+.del-btn{
+    background-color:transparent;
+    border:2px solid #000;
+    color:#000;
+    transition:all 0.3s ease;
 }
 
 .edit-btn:hover{
-    background-color: #fe424d !important;
-    color: white !important; 
-    border: none;   
+    background-color:#fe424d !important;
+    color:white !important;
+    border:none;
 }
+
 .del-btn:hover{
-    background-color: #000000 !important;
-    color: white !important;
-    border: none;
+    background-color:#000000 !important;
+    color:white !important;
+    border:none;
+}
+
+
+/* ================= SHOW PAGE ================= */
+
+.show-img{
+    height:30vh;
+    object-fit:cover;
+    border-radius:12px 12px 0 0;
+}
+
+
+/* ================= REVIEWS SECTION ================= */
+
+.review-section{
+    padding:40px 80px;
+}
+
+/* Scrollable review list */
+
+.review-scroll{
+    max-height:500px;
+    overflow-y:auto;
+    padding-right:10px;
+}
+
+/* Review card */
+
+.review-card{
+    border-radius:12px;
+    transition:all 0.2s ease;
+}
+
+.review-card:hover{
+    transform:translateY(-3px);
+}
+
+/* Review stars */
+
+.review-stars i{
+    font-size:1.1rem;
+    margin-right:3px;
+}
+
+/* Scrollbar styling */
+
+.review-scroll::-webkit-scrollbar{
+    width:6px;
+}
+
+.review-scroll::-webkit-scrollbar-thumb{
+    background:#d6d6d6;
+    border-radius:10px;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width:992px){
+
+    .review-section{
+        padding:30px 20px;
+    }
+
+    .review-scroll{
+        max-height:none;
+    }
+
+}
+
+/* ================= STAR RATING INPUT ================= */
+
+.star-rating{
+    direction:rtl;
+    display:inline-flex;
+    font-size:1.8rem;
+}
+
+.star-rating input{
+    display:none;
+}
+
+.star-rating label{
+    color:#ccc;
+    cursor:pointer;
+    transition:color 0.2s;
+}
+
+/* Hover effect */
+
+.star-rating label:hover,
+.star-rating label:hover ~ label{
+    color:#000;
+}
+
+/* Selected stars */
+
+.star-rating input:checked ~ label{
+    color:#000;
 }

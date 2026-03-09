@@ -1,33 +1,156 @@
-<% layout("/layouts/boilerplate")%>
-<div class="row mt-3">
-  <div class="col-8 offset-2">
-  <h3>Listing Details :</h3>
-  <div class="card">
-    <img src="<%= listing.image %>>" class="card-img-top show-img" alt="listing_image" />
-    <div class="card-body">
-      <b><%= listing.title %></b><br>
-      <%= listing.description %><br>
-      &#8377;<%= listing.price?.toLocaleString("en-IN") || "0" %><br>
-      <%= listing.location %><br>
-      <%= listing.country %><br>
+<% layout("/layouts/boilerplate") %>
+<div class="container">
+
+  <!-- ================= LISTING ================= -->
+  <div class="row mt-3">
+    <div class="col-lg-8 offset-lg-2">
+
+      <div class="title mb-3">
+        <h3><%= listing.title %></h3>
+      </div>
+
+      <div class="card">
+        <img src="<%= listing.image %>" class="card-img-top show-img" alt="listing_image">
+        <div class="card-body">
+          <p><%= listing.description %></p>
+          <p>&#8377;<%= listing.price?.toLocaleString("en-IN") || "0" %></p>
+          <p><%= listing.location %></p>
+          <p><%= listing.country %></p>
+        </div>
+      </div>
+
+      <div class="row g-2 mt-3 mb-4">
+        <div class="col-6">
+          <a href="/listings/<%= listing._id %>/edit" class="btn btn-outline-dark w-100">
+            Edit
+          </a>
+        </div>
+
+        <div class="col-6">
+          <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+            <button class="btn btn-outline-dark w-100">
+              Delete
+            </button>
+          </form>
+        </div>
+      </div>
+
     </div>
   </div>
-  <br />
-<div class="row g-2  mb-4">
-  <div class="col-6">
-    <a href="/listings/<%= listing._id %>/edit" 
-       class="btn btn-outline-dark edit-btn w-100">
-       Edit
-    </a>
-  </div>
+</div>
 
-  <div class="col-6">
-    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
-      <button class="btn btn-outline-dark del-btn w-100">
-        Delete
-      </button> 
-    </form>
+<br>
+<br>
+
+<!-- ================= REVIEWS SECTION ================= -->
+<div class="container-fluid review-section mt-5 mb-5">
+  <div class="row g-4">
+
+    <!-- ===== REVIEW FORM ===== -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm border-0 sticky-top" style="top:90px;">
+        <div class="card-body">
+
+          <h4 class="mb-4">Write a Review</h4>
+
+          <form method="POST"
+                action="/listings/<%= listing._id %>/reviews"
+                novalidate
+                class="needs-validation">
+
+            <!-- STAR RATING -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Rating</label>
+
+              <div class="star-rating">
+                <input type="radio" id="star5" name="review[rating]" value="5" required>
+                <label for="star5"><i class="bi bi-star-fill"></i></label>&nbsp;
+
+                <input type="radio" id="star4" name="review[rating]" value="4">
+                <label for="star4"><i class="bi bi-star-fill"></i></label>&nbsp;
+
+                <input type="radio" id="star3" name="review[rating]" value="3">
+                <label for="star3"><i class="bi bi-star-fill"></i></label>&nbsp;
+
+                <input type="radio" id="star2" name="review[rating]" value="2">
+                <label for="star2"><i class="bi bi-star-fill"></i></label>&nbsp;
+
+                <input type="radio" id="star1" name="review[rating]" value="1">
+                <label for="star1"><i class="bi bi-star-fill"></i></label>&nbsp;
+              </div>
+            </div>
+
+            <!-- COMMENT -->
+            <div class="mb-4">
+              <label for="comment" class="form-label fw-semibold">Comment</label>
+
+              <textarea
+                name="review[comment]"
+                id="comment"
+                rows="4"
+                class="form-control"
+                placeholder="Share your experience..."
+                required></textarea>
+
+              <div class="invalid-feedback">
+                Please enter a review comment.
+              </div>
+            </div>
+
+            <button class="btn btn-dark w-100">
+              Submit Review
+            </button>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== REVIEWS DISPLAY ===== -->
+    <div class="col-lg-8">
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>Guest Reviews</h4>
+        <small class="text-muted"><%= listing.reviews.length %> reviews</small>
+      </div>
+
+      <div class="review-scroll">
+
+        <% for(review of listing.reviews){ %>
+
+        <div class="review-card card border-0 shadow-sm mb-3">
+          <div class="card-body">
+
+            <!-- STARS -->
+            <div class="review-stars mb-2">
+              <% for(let i = 1; i <= 5; i++){ %>
+                <% if(i <= review.rating){ %>
+                  <i class="bi bi-star-fill text-dark"></i>
+                <% } else { %>
+                  <i class="bi bi-star text-muted"></i>
+                <% } %>
+              <% } %>
+            </div>
+
+            <p class="text-muted mb-0"><%= review.comment %></p>
+
+            <form method="POST"
+                  action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+                  class="mt-3">
+
+              <button class="btn btn-outline-dark btn-sm">
+                Delete
+              </button>
+
+            </form>
+
+          </div>
+        </div>
+
+        <% } %>
+
+      </div>
+    </div>
+
   </div>
-</div>
-</div>
 </div>
