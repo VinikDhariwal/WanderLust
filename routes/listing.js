@@ -36,6 +36,7 @@ router.post(
   wrapAsync(async (req, res) => {
     const newListing = new Listing(req.validatedListing);
     await newListing.save();
+    req.flash("success", "New Listing Created!");
     res.redirect("/listings");
   }),
 );
@@ -58,6 +59,7 @@ router.get(
     const { id } = req.params;
     const listing = await Listing.findById(id);
     if (!listing) return next(new ExpressError(404, "Listing not found"));
+    req.flash("success", "Listing Updated!");
     res.render("listings/edit", { listing });
   }),
 );
@@ -73,6 +75,7 @@ router.put(
       runValidators: true,
     });
     if (!updated) return next(new ExpressError(404, "Listing not found"));
+    req.flash("success", "Listing Deleted!");
     res.redirect(`/listings/${id}`);
   }),
 );
@@ -84,6 +87,7 @@ router.delete(
     const { id } = req.params;
     const deleted = await Listing.findByIdAndDelete(id);
     if (!deleted) return next(new ExpressError(404, "Listing not found"));
+    req.flash("success", "Listing Deleted!");
     res.redirect("/listings");
   }),
 );
