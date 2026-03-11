@@ -1,0 +1,66 @@
+<% layout("/layouts/boilerplate") %>
+
+<div
+  class="container d-flex justify-content-center align-items-center"
+  style="min-height: 80vh"
+>
+  <div class="card shadow p-4" style="width: 420px; border-radius: 16px">
+    <h4 class="text-center mb-4 fw-bold">Log in</h4>
+
+    <form action="/login" method="POST" novalidate class="needs-validation">
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          class="form-control"
+          placeholder="Enter username"
+          required
+        />
+        <div class="invalid-feedback">Please enter your username.</div>
+      </div>
+
+      <div class="mb-4">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          class="form-control"
+          placeholder="Enter password"
+          required
+        />
+        <div class="invalid-feedback">Please enter your password.</div>
+      </div>
+
+      <button class="btn btn-danger w-100 fw-semibold">Log in</button>
+
+      <p class="text-center mt-3 mb-0">
+        Don’t have an account?
+        <a href="/signup" class="text-decoration-none fw-semibold">Sign up</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<script>
+  (() => {
+    "use strict";
+    const forms = document.querySelectorAll(".needs-validation");
+
+    Array.from(forms).forEach((form) => {
+      form.addEventListener(
+        "submit",
+        (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add("was-validated");
+        },
+        false,
+      );
+    });
+  })();
+</script>
