@@ -1,23 +1,45 @@
-<% if(success && success.length) { %>
-  <div class="alert alert-success alert-dismissible fade show mt-3 col-6 offset-3" role="alert">
-    <%= success[0] %>
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-    ></button>
-  </div>
-<% } %>
+<div id="flash-container">
+  <% if(success && success.length){ %>
+    <div class="alert alert-success alert-dismissible fade show mt-3 col-6 offset-3" role="alert">
+      <%= success[0] %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
 
-<% if(error && error.length) { %>
-  <div class="alert alert-danger alert-dismissible fade show mt-3 col-6 offset-3" role="alert">
-    <%= error[0] %>
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="alert"
-      aria-label="Close"
-    ></button>
-  </div>
-<% } %>
+  <% if(error && error.length){ %>
+    <div class="alert alert-danger alert-dismissible fade show mt-3 col-6 offset-3" role="alert">
+      <%= error[0] %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
+</div>
+
+<style>
+  .alert {
+    transition: opacity 0.5s ease, max-height 0.5s ease, margin 0.5s ease, padding 0.5s ease;
+    overflow: hidden;
+  }
+  .alert.hide {
+    opacity: 0;
+    max-height: 0;
+    margin: 0;
+    padding: 0;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const alerts = document.querySelectorAll(".alert");
+
+    alerts.forEach(alert => {
+      // Only auto-hide success messages
+      if (alert.classList.contains("alert-success")) {
+        setTimeout(() => {
+          alert.classList.add("hide");
+          setTimeout(() => alert.remove(), 500); // match CSS transition
+        }, 2000); // 2 seconds delay for success
+      }
+      // Error messages stay until user closes
+    });
+  });
+</script>
