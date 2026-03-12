@@ -20,6 +20,11 @@ const ExpressError = require("./utils/ExpressError");
 // Models
 const User = require("./models/user");
 
+app.use((req, res, next) => {
+  res.locals.mapToken = process.env.MAP_TOKEN;
+  next();
+});
+
 // Routes
 const listingsRoutes = require("./routes/listing");
 const reviewsRoutes = require("./routes/review");
