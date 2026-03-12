@@ -3,7 +3,10 @@
 <div class="container mt-4 mb-5" style="max-width: 600px;">
     <h3 class="mb-4">Create a New Listing</h3>
 
-    <form method="POST" action="/listings" novalidate class="needs-validation">
+    <form method="POST" 
+    action="/listings" 
+    novalidate class="needs-validation" 
+    enctype="multipart/form-data">
 
         <!-- Title -->
         <div class="mb-3">
@@ -34,7 +37,7 @@
             <label class="form-label">Image URL</label>
             <input 
                 name="listing[image]"  
-                type="text"
+                type="file"
                 class="form-control"
             />
         </div>

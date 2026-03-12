@@ -10,7 +10,7 @@
       </div>
 
       <div class="card">
-        <img src="<%= listing.image %>" class="card-img-top show-img" alt="listing_image">
+        <img src="<%= listing.image.url || listing.image%>" class="card-img-top show-img" alt="listing_image">
         <div class="card-body">
           <p><b><%= listing.owner.username %></b></p><br>
           <p><%= listing.description %></p>
