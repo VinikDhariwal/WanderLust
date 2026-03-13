@@ -1,5 +1,5 @@
-if(process.env.NODE_ENV != "production"){
-  require('dotenv').config();
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
 }
 
 const express = require("express");
@@ -9,12 +9,12 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
+const { MongoStore } = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const multer = require("multer");
-const upload = multer({dest: 'uploads/'})
-
+const upload = multer({ dest: "uploads/" });
 const ExpressError = require("./utils/ExpressError");
 
 // Models
@@ -27,36 +27,50 @@ app.use((req, res, next) => {
 
 // Routes
 const listingsRoutes = require("./routes/listing");
-const reviewsRoutes = require("./routes/review");
-const usersRoutes = require("./routes/user");
+const reviewsRoutes  = require("./routes/review");
+const usersRoutes    = require("./routes/user");
 
 // Middleware
 const { isLoggedIn, saveRedirectUrl } = require("./middleware");
 
 // ---------------- DATABASE ----------------
+// const dbUrl = process.env.ATLASDB_URL; // MongoDB Atlas
+const dbUrl = "mongodb://127.0.0.1:27017/wanderlust"; // MongoDB Local
+
 mongoose
-  .connect("mongodb://127.0.0.1:27017/wanderlust")
+  .connect(dbUrl)
   .then(() => console.log("Database connected"))
   .catch((err) => console.log("DB connection error:", err));
+
+// ---------------- MONGO SESSION STORE ----------------
+const store = MongoStore.create({
+  mongoUrl:   dbUrl,
+  crypto:     { secret: dbUrl || process.env.SECRET },
+  touchAfter: 24 * 60 * 60,
+});
+
+store.on("error", (err) => {
+  console.log("Session store error:", err);
+});
 
 // ---------------- APP SETUP ----------------
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
 // ---------------- SESSION ----------------
 const sessionConfig = {
-  secret: "SecretCode",
-  resave: false,
+  store,
+  secret:            process.env.SECRET || "SecretCode",
+  resave:            false,
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    maxAge:  7 * 24 * 60 * 60 * 1000,
   },
 };
 
@@ -73,22 +87,21 @@ passport.deserializeUser(User.deserializeUser());
 // ---------------- FLASH & CURRENT USER ----------------
 app.use((req, res, next) => {
   res.locals.currUser = req.user;
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
+  res.locals.success  = req.flash("success");
+  res.locals.error    = req.flash("error");
   next();
 });
 
 // ---------------- ROUTES ----------------
 app.get("/", (req, res) => {
-  res.render("home"); // make sure home.ejs exists
+  res.render("home");
 });
 
-app.use("/", usersRoutes); // login/signup routes
+app.use("/", usersRoutes);
 app.use("/listings", listingsRoutes);
-app.use("/listings/:id/reviews", reviewsRoutes); // nested reviews
+app.use("/listings/:id/reviews", reviewsRoutes);
 
 // ---------------- 404 HANDLER ----------------
-// Use regex /.*/ instead of * to avoid PathError
 app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, "Not Found: The requested page does not exist."));
 });

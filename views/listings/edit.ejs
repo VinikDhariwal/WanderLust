@@ -3,6 +3,7 @@
   <h3 class="mb-4">Edit Listing</h3>
   <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" 
     novalidate class="needs-validation" enctype="multipart/form-data">
+
     <!-- Title -->
     <div class="mb-3">
       <label class="form-label">Title</label>
@@ -15,6 +16,7 @@
       />
       <div class="invalid-feedback">Enter a valid title for the place!</div>
     </div>
+
     <!-- Description -->
     <div class="mb-3">
       <label class="form-label">Description</label>
@@ -26,6 +28,7 @@
       ><%= listing.description %></textarea>
       <div class="invalid-feedback">A description is required!</div>
     </div>
+
     <!-- Image -->
     <div class="mb-3">
       <label class="form-label"></label>
@@ -36,6 +39,29 @@
         class="form-control"
       />
     </div>
+
+    <!-- Category -->
+    <div class="mb-3">
+      <label class="form-label">Category</label>
+      <select name="listing[category]" class="form-select">
+        <option value="all"         <%= listing.category === "all"         ? "selected" : "" %>>All</option>
+        <option value="trending"    <%= listing.category === "trending"    ? "selected" : "" %>>Trending</option>
+        <option value="beach"       <%= listing.category === "beach"       ? "selected" : "" %>>Beach</option>
+        <option value="mountain"    <%= listing.category === "mountain"    ? "selected" : "" %>>Mountains</option>
+        <option value="city"        <%= listing.category === "city"        ? "selected" : "" %>>City</option>
+        <option value="countryside" <%= listing.category === "countryside" ? "selected" : "" %>>Countryside</option>
+        <option value="pool"        <%= listing.category === "pool"        ? "selected" : "" %>>Pools</option>
+        <option value="cabin"       <%= listing.category === "cabin"       ? "selected" : "" %>>Cabins</option>
+        <option value="camping"     <%= listing.category === "camping"     ? "selected" : "" %>>Camping</option>
+        <option value="luxury"      <%= listing.category === "luxury"      ? "selected" : "" %>>Luxury</option>
+        <option value="arctic"      <%= listing.category === "arctic"      ? "selected" : "" %>>Arctic</option>
+        <option value="desert"      <%= listing.category === "desert"      ? "selected" : "" %>>Desert</option>
+        <option value="island"      <%= listing.category === "island"      ? "selected" : "" %>>Islands</option>
+        <option value="lake"        <%= listing.category === "lake"        ? "selected" : "" %>>Lake</option>
+        <option value="farm"        <%= listing.category === "farm"        ? "selected" : "" %>>Farms</option>
+      </select>
+    </div>
+
     <!-- Price -->
     <div class="mb-3">
       <label class="form-label">Price</label>
@@ -48,30 +74,33 @@
       />
       <div class="invalid-feedback">Please enter a valid price!</div>
     </div>
-    <!-- Location -->
-    <div class="mb-3">
-      <label class="form-label">Location</label>
-      <input
-        name="listing[location]"
-        type="text"
-        class="form-control"
-        value="<%= listing.location %>"
-        required
-      />
-      <div class="invalid-feedback">Please enter a location!</div>
+
+    <!-- Location & Country -->
+    <div class="row mb-4">
+      <div class="col-6">
+        <label class="form-label">Location</label>
+        <input
+          name="listing[location]"
+          type="text"
+          class="form-control"
+          value="<%= listing.location %>"
+          required
+        />
+        <div class="invalid-feedback">Please enter a location!</div>
+      </div>
+      <div class="col-6">
+        <label class="form-label">Country</label>
+        <input
+          name="listing[country]"
+          type="text"
+          class="form-control"
+          value="<%= listing.country %>"
+          required
+        />
+        <div class="invalid-feedback">Please enter country name!</div>
+      </div>
     </div>
-    <!-- Country -->
-    <div class="mb-4">
-      <label class="form-label">Country</label>
-      <input
-        name="listing[country]"
-        type="text"
-        class="form-control"
-        value="<%= listing.country %>"
-        required
-      />
-      <div class="invalid-feedback">Please enter country name!</div>
-    </div>
+
     <button class="btn btn-dark w-100">Update Listing</button>
   </form>
 </div>

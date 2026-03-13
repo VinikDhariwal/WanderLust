@@ -1,19 +1,121 @@
+<style>
+  .navbar { padding: 0; }
+
+  .navbar-brand {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fe424d !important;
+    letter-spacing: -0.5px;
+  }
+
+  .navbar-brand i { color: #fe424d; }
+
+  .search-form {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1.5px solid #ddd;
+    border-radius: 40px;
+    padding: 6px 6px 6px 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: box-shadow 0.2s;
+    width: 380px;
+  }
+
+  .search-form:focus-within {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.14);
+    border-color: #bbb;
+  }
+
+  .search-form input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    width: 100%;
+    color: #222;
+  }
+
+  .search-form input::placeholder { color: #aaa; }
+
+  .search-form button {
+    background: #fe424d;
+    border: none;
+    color: #fff;
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .search-form button:hover {
+    background: #e0313b;
+    transform: scale(1.05);
+  }
+
+  .profile-menu-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border: 1.5px solid #ddd;
+    border-radius: 40px;
+    padding: 6px 12px 6px 14px;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  .profile-menu-btn:hover {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.14);
+  }
+
+  .profile-menu-btn i { font-size: 15px; color: #444; }
+
+  .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .dropdown-menu {
+    border-radius: 14px !important;
+    min-width: 180px;
+    padding: 6px 0;
+    margin-top: 8px !important;
+  }
+
+  .dropdown-item {
+    font-size: 14px;
+    padding: 9px 18px;
+    border-radius: 8px;
+    margin: 0 4px;
+    width: calc(100% - 8px);
+  }
+
+  .dropdown-item:hover { background: #f5f5f5; }
+
+  @media (max-width: 768px) {
+    .search-form { width: 100%; margin: 8px 0; }
+    .navbar-collapse { gap: 10px; padding: 10px 0; }
+  }
+</style>
+
 <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
   <div class="container">
 
-    <!-- ================= BRAND / LOGO ================= -->
-    <!-- Main application logo that redirects to listings page -->
-
-    <a class="navbar-brand fw-semibold" href="/listings">
-      <i class="fa-regular fa-compass me-2"></i>WanderLust
+    <a class="navbar-brand fw-bold" href="/listings">
+      <i class="fa-regular fa-compass me-1"></i>WanderLust
     </a>
 
-
-    <!-- ================= MOBILE NAVBAR TOGGLER ================= -->
-    <!-- Controls collapsing navigation for smaller screens -->
-
     <button
-      class="navbar-toggler"
+      class="navbar-toggler border-0"
       type="button"
       data-bs-toggle="collapse"
       data-bs-target="#navbarNav"
@@ -21,115 +123,62 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    <div class="collapse navbar-collapse d-lg-flex align-items-center justify-content-between" id="navbarNav">
 
-    <div class="collapse navbar-collapse" id="navbarNav">
+      <form class="search-form mx-auto" action="/listings" method="GET" role="search">
+        <input
+          type="search"
+          name="search"
+          placeholder="Search destinations, titles, countries..."
+          value="<%= typeof search !== 'undefined' ? search : '' %>"
+          autocomplete="off"
+        />
+        <button type="submit" aria-label="Search">
+          <i class="fa-solid fa-magnifying-glass fa-xs"></i>
+        </button>
+      </form>
 
-
-      <!-- ================= CENTER NAVIGATION LINKS ================= -->
-      <!-- Core navigation links for browsing listings -->
-
-      <div class="navbar-nav mx-auto">
-
-        <a class="nav-link fw-medium" href="/listings">
-          Explore
-        </a>
-
-        <a class="nav-link fw-medium" href="/listings/new">
-          Add Estate
-        </a>
-
-      </div>
-
-
-      <!-- ================= PROFILE / AUTH MENU ================= -->
-      <!-- Airbnb-style profile dropdown menu -->
-
-      <div class="dropdown ms-auto">
-
-        <!-- Profile Menu Button -->
-        <!-- Contains hamburger icon and user avatar -->
-
+      <div class="dropdown ms-lg-3 mt-2 mt-lg-0">
         <button
           class="profile-menu-btn"
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-
-          <!-- Hamburger icon -->
           <i class="fa-solid fa-bars"></i>
-
-          <!-- Show avatar only when user is logged in -->
           <% if(currUser){ %>
-
-            <img
-              src="https://i.pravatar.cc/40?u=<%= currUser.username %>"
-              class="avatar"
-              alt="profile"
-            >
-
+          <img
+            src="https://i.pravatar.cc/40?u=<%= currUser.username %>"
+            class="avatar"
+            alt="profile"
+          >
           <% } %>
-
         </button>
 
-
-        <!-- ================= DROPDOWN MENU ================= -->
-        <!-- Content of menu changes depending on authentication -->
-
         <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-
-
-          <!-- ========= USER NOT LOGGED IN ========= -->
-
           <% if(!currUser){ %>
-
-            <li>
-              <a class="dropdown-item fw-semibold" href="/login">
-                Log in
-              </a>
-            </li>
-
-            <li>
-              <a class="dropdown-item" href="/signup">
-                Sign up
-              </a>
-            </li>
-
+          <li><a class="dropdown-item fw-semibold" href="/login">Log in</a></li>
+          <li><a class="dropdown-item" href="/signup">Sign up</a></li>
           <% } %>
-
-
-          <!-- ========= USER LOGGED IN ========= -->
-
           <% if(currUser){ %>
-
-            <li>
-              <a class="dropdown-item fw-semibold" href="/profile">
-                Profile
-              </a>
-            </li>
-
-            <li>
-              <a class="dropdown-item" href="/listings/new">
-                Add Listing
-              </a>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li>
-              <a class="dropdown-item text-danger" href="/logout">
-                Logout
-              </a>
-            </li>
-
+          <li>
+            <a class="dropdown-item" href="/profile">
+              <i class="fa-regular fa-user me-2"></i>Profile
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="/listings/new">
+              <i class="fa-regular fa-plus-square me-2"></i>Add listing
+            </a>
+          </li>
+          <li><hr class="dropdown-divider mx-3"></li>
+          <li>
+            <a class="dropdown-item text-danger" href="/logout">
+              <i class="fa-solid fa-right-from-bracket me-2"></i>Logout
+            </a>
+          </li>
           <% } %>
-
-
         </ul>
-
       </div>
-
 
     </div>
   </div>

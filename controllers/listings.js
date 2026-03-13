@@ -3,8 +3,21 @@ const ExpressError = require("../utils/ExpressError");
 const { cloudinary } = require("../cloudConfig.js");
 
 module.exports.index = async (req, res) => {
-  const allListings = await Listing.find({});
-  res.render("listings/index", { allListings });
+  const { search } = req.query;
+  let allListings;
+  if (search && search.trim() !== "") {
+    allListings = await Listing.find({
+      $or: [
+        { title:    { $regex: search, $options: "i" } },
+        { location: { $regex: search, $options: "i" } },
+        { country:  { $regex: search, $options: "i" } },
+        { category: { $regex: search, $options: "i" } },
+      ],
+    });
+  } else {
+    allListings = await Listing.find({});
+  }
+  res.render("listings/index", { allListings, search: search || "" });
 };
 
 module.exports.renderNewForm = (req, res) => {
@@ -49,7 +62,6 @@ module.exports.updateListing = async (req, res, next) => {
   });
   if (!updated) return next(new ExpressError(404, "Listing not found"));
   if (req.file) {
-    // delete old image from cloudinary
     if (updated.image.filename) {
       await cloudinary.uploader.destroy(updated.image.filename);
     }
@@ -67,7 +79,6 @@ module.exports.destroyListing = async (req, res, next) => {
   const { id } = req.params;
   const deleted = await Listing.findByIdAndDelete(id);
   if (!deleted) return next(new ExpressError(404, "Listing not found"));
-  // delete image from cloudinary
   if (deleted.image && deleted.image.filename) {
     await cloudinary.uploader.destroy(deleted.image.filename);
   }
