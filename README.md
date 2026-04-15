@@ -15,4 +15,13 @@ Features:
 ☁️ Cloudinary integration for image storage and management
 🛡️ Input validation with Joi and secure session management
 
-Built with: Node.js · Express · MongoDB · Mongoose · Passport.js · Cloudinary · Mapbox · EJS · Bootstrap 5
+Built with: 
+· Node.js 
+· Express 
+· MongoDB 
+· Mongoose 
+· Passport.js 
+· Cloudinary 
+· Mapbox 
+· EJS 
+· Bootstrap 5
