@@ -1,144 +1,126 @@
 <% layout("/layouts/boilerplate") %>
-
 <style>
-  .listing-links { text-decoration: none; color: inherit; }
+.listing-links { text-decoration: none; color: inherit; }
+.card { border: none; border-radius: 12px; overflow: hidden; transition: transform 0.2s; }
+.card:hover { transform: translateY(-2px); }
+.card-img-top { height: 220px; object-fit: cover; border-radius: 12px; }
+.card-body { padding: 8px 4px 0; }
+.card-text b { font-size: 15px; font-weight: 600; color: #222; }
+.price-display { font-size: 14px; color: #444; margin: 0; }
+.price-display .base-price { font-weight: 600; color: #222; }
+.tax-note-extra { font-size: 11px; color: #717171; }
+.price-with-tax { display: none; }
+.price-without-tax { display: inline; }
+#no-results { display: none; text-align: center; padding: 60px 0; color: #888; }
+#no-results i { font-size: 48px; margin-bottom: 12px; display: block; }
 
-  .card { border: none; border-radius: 12px; overflow: hidden; transition: transform 0.2s; }
-  .card:hover { transform: translateY(-2px); }
-  .card-img-top { height: 220px; object-fit: cover; border-radius: 12px; }
-  .card-body { padding: 8px 4px 0; }
-  .card-text b { font-size: 15px; font-weight: 600; color: #222; }
-  .price-display { font-size: 14px; color: #444; margin: 0; }
-  .price-display .base-price { font-weight: 600; color: #222; }
-  .tax-note-extra { font-size: 11px; color: #717171; }
+/* ── Filter bar ── */
+#filter-bar {
+  position: sticky;
+  top: 70px;
+  z-index: 100;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 12px 0 0;
+}
+.filter-scroll-wrapper { display: flex; align-items: center; position: relative; overflow: hidden; }
+.filter-scroll {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 0 16px 12px;
+  scrollbar-width: none;
+  flex: 1;
+}
+.filter-scroll::-webkit-scrollbar { display: none; }
+.filter-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s, opacity 0.2s;
+  opacity: 0.6;
+  min-width: 72px;
+  color: #222;
+}
+.filter-btn:hover { opacity: 1; border-bottom-color: #b0b0b0; }
+.filter-btn.active { opacity: 1; border-bottom-color: #222; }
+.filter-btn i { font-size: 22px; }
+.filter-btn span { font-size: 11px; font-weight: 600; }
+.scroll-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e0e0e0;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-60%);
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  transition: box-shadow 0.2s;
+}
+.scroll-arrow:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+.scroll-arrow.left { left: 4px; }
+.scroll-arrow.right { right: 4px; }
+.scroll-arrow.hidden { display: none; }
+.filter-scroll-wrapper::before,
+.filter-scroll-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 12px;
+  width: 60px;
+  pointer-events: none;
+  z-index: 5;
+}
+.filter-scroll-wrapper::before { left: 0; background: linear-gradient(to right, #fff 40%, transparent); }
+.filter-scroll-wrapper::after  { right: 0; background: linear-gradient(to left,  #fff 40%, transparent); }
 
-  .price-with-tax { display: none; }
-  .price-without-tax { display: inline; }
-
-  #no-results { display: none; text-align: center; padding: 60px 0; color: #888; }
-  #no-results i { font-size: 48px; margin-bottom: 12px; display: block; }
-
-  /* ── Filter bar ── */
-  #filter-bar {
-    position: sticky;
-    top: 56px;
-    z-index: 100;
-    background: #fff;
-    border-bottom: 1px solid #e0e0e0;
-    padding: 12px 0 0;
-  }
-
-  .filter-scroll-wrapper { display: flex; align-items: center; position: relative; overflow: hidden; }
-
-  .filter-scroll {
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    padding: 0 16px 12px;
-    scrollbar-width: none;
-    flex: 1;
-  }
-
-  .filter-scroll::-webkit-scrollbar { display: none; }
-
-  .filter-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    white-space: nowrap;
-    border-bottom: 2px solid transparent;
-    transition: border-color 0.2s, opacity 0.2s;
-    opacity: 0.6;
-    min-width: 72px;
-    color: #222;
-  }
-
-  .filter-btn:hover { opacity: 1; border-bottom-color: #b0b0b0; }
-  .filter-btn.active { opacity: 1; border-bottom-color: #222; }
-  .filter-btn i { font-size: 22px; }
-  .filter-btn span { font-size: 11px; font-weight: 600; }
-
-  .scroll-arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border: 1px solid #e0e0e0;
-    border-radius: 50%;
-    background: #fff;
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-60%);
-    z-index: 10;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-    transition: box-shadow 0.2s;
-  }
-
-  .scroll-arrow:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-  .scroll-arrow.left { left: 4px; }
-  .scroll-arrow.right { right: 4px; }
-  .scroll-arrow.hidden { display: none; }
-
-  .filter-scroll-wrapper::before,
-  .filter-scroll-wrapper::after {
-    content: '';
-    position: absolute;
-    top: 0; bottom: 12px;
-    width: 60px;
-    pointer-events: none;
-    z-index: 5;
-  }
-
-  .filter-scroll-wrapper::before { left: 0; background: linear-gradient(to right, #fff 40%, transparent); }
-  .filter-scroll-wrapper::after  { right: 0; background: linear-gradient(to left,  #fff 40%, transparent); }
-
-  /* ── Tax toggle ── */
-  .tax-toggle-wrap {
-    display: flex;
-    align-items: center;
-    padding: 0 16px 12px;
-    border-left: 1px solid #e0e0e0;
-    flex-shrink: 0;
-  }
-
-  .toggle-label-wrap { display: flex; align-items: center; gap: 10px; cursor: pointer; margin: 0; }
-  .toggle-label-wrap span { font-size: 12px; font-weight: 600; color: #222; user-select: none; }
-
-  .toggle-switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
-  .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
-
-  .toggle-track {
-    position: absolute;
-    inset: 0;
-    background: #ccc;
-    border-radius: 34px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .toggle-track::before {
-    content: '';
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    left: 3px;
-    top: 3px;
-    background: white;
-    border-radius: 50%;
-    transition: transform 0.2s;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  }
-
-  .toggle-switch input:checked + .toggle-track { background: #222; }
-  .toggle-switch input:checked + .toggle-track::before { transform: translateX(20px); }
+/* ── Tax toggle ── */
+.tax-toggle-wrap {
+  display: flex;
+  align-items: center;
+  padding: 0 16px 12px;
+  border-left: 1px solid #e0e0e0;
+  flex-shrink: 0;
+}
+.toggle-label-wrap { display: flex; align-items: center; gap: 10px; cursor: pointer; margin: 0; }
+.toggle-label-wrap span { font-size: 12px; font-weight: 600; color: #222; user-select: none; }
+.toggle-switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+.toggle-track {
+  position: absolute;
+  inset: 0;
+  background: #ccc;
+  border-radius: 34px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.toggle-track::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.toggle-switch input:checked + .toggle-track { background: #222; }
+.toggle-switch input:checked + .toggle-track::before { transform: translateX(20px); }
 </style>
 
 <!-- ── Filter Bar ── -->
@@ -147,7 +129,6 @@
     <button class="scroll-arrow left hidden" id="arrow-left" onclick="scrollFilters(-1)">
       <i class="fa-solid fa-chevron-left fa-xs"></i>
     </button>
-
     <div class="filter-scroll" id="filter-scroll">
       <button class="filter-btn active" data-filter="all"><i class="fa-solid fa-layer-group"></i><span>All</span></button>
       <button class="filter-btn" data-filter="trending"><i class="fa-solid fa-fire"></i><span>Trending</span></button>
@@ -165,7 +146,6 @@
       <button class="filter-btn" data-filter="lake"><i class="fa-solid fa-person-swimming"></i><span>Lake</span></button>
       <button class="filter-btn" data-filter="farm"><i class="fa-solid fa-tractor"></i><span>Farms</span></button>
     </div>
-
     <button class="scroll-arrow right" id="arrow-right" onclick="scrollFilters(1)">
       <i class="fa-solid fa-chevron-right fa-xs"></i>
     </button>
@@ -194,8 +174,8 @@
 <% } %>
 
 <!-- ── Listings Grid ── -->
-<div class="listings mt-4 mb-5 container">
-  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 g-4 justify-content-center" id="listings-grid">
+<div class="listings container" style="margin-top: 5rem; margin-bottom: 4rem;">
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 g-4" id="listings-grid">
     <% for (let listing of allListings) { %>
     <%
       const TAX_RATE = 0.18;
@@ -204,7 +184,7 @@
     %>
     <div class="col listing-card" data-category="<%= listing.category || 'all' %>">
       <a href="/listings/<%= listing._id %>" class="listing-links">
-        <div class="card h-100">
+        <div class="card h-100 mt-3">
           <img
             src="<%= listing.image.url || listing.image %>"
             class="card-img-top"

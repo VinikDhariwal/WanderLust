@@ -34,8 +34,8 @@ const usersRoutes    = require("./routes/user");
 const { isLoggedIn, saveRedirectUrl } = require("./middleware");
 
 // ---------------- DATABASE ----------------
-// const dbUrl = process.env.ATLASDB_URL; // MongoDB Atlas
-const dbUrl = "mongodb://127.0.0.1:27017/wanderlust"; // MongoDB Local
+const dbUrl = process.env.ATLASDB_URL; // MongoDB Atlas
+//const dbUrl = "mongodb://127.0.0.1:27017/wanderlust"; // MongoDB Local
 
 mongoose
   .connect(dbUrl)
@@ -94,7 +94,7 @@ app.use((req, res, next) => {
 
 // ---------------- ROUTES ----------------
 app.get("/", (req, res) => {
-  res.render("home");
+  res.redirect("/listings");
 });
 
 app.use("/", usersRoutes);
