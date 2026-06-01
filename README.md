@@ -18,10 +18,11 @@ Features:
 Built with: 
 · Node.js 
 · Express 
-· MongoDB 
-· Mongoose 
-· Passport.js 
 · Cloudinary 
 · Mapbox 
 · EJS 
 · Bootstrap 5
+· MongoDB 
+· Mongoose 
+· Passport.js 
+
